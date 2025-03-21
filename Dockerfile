@@ -1,9 +1,10 @@
 FROM python:3.10
 
 WORKDIR /app
-COPY src/ /app
+COPY src/requirements.txt .
 
-RUN apt-get update && \
-apt-get install -y --no-install-recommends apt-transport-https
+RUN pip install -r requirements.txt
 
-CMD [ "python3", "-m", "print_hello" ]
+COPY src/ .
+
+CMD [ "python3", "print_hello.py" ]
