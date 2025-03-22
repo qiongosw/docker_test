@@ -1,10 +1,13 @@
-# import debugpy
+import debugpy
 
-# # Allow connection from any IP (0.0.0.0)
-# debugpy.listen(("0.0.0.0", 5678))
-# print("Waiting for debugger to attach...")
-# debugpy.wait_for_client()  # Wait until debugger is attached
-# print("Debugger attached.")
+# Allow debugger to attach to the container on port 5678
+print("Waiting for debugger to attach...")
+debugpy.listen(("0.0.0.0", 5678))
+debugpy.wait_for_client()  # Pause execution until debugger attaches
+print("Debugger attached. Running script...")
 
-welcome = "Hello World!"
+welcome = "Hello from Docker with Debugger!"
+breakpoint()
+print("test debuggerpy")
+breakpoint
 print(welcome)
