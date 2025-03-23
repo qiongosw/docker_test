@@ -1,9 +1,16 @@
-FROM python:3.10
+# Use an official Python runtime as the base image
+FROM python:3.10-slim
 
+# Set the working directory inside the container
 WORKDIR /app
-COPY src/ /app
 
-RUN apt-get update && \
-apt-get install -y --no-install-recommends apt-transport-https
+# Copy requirements and install them (cache dependencies)
+COPY src/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-CMD [ "python3", "-m", "print_hello" ]
+# Copy the rest of the application code
+COPY src/ .
+
+# Command to run the Python script
+#CMD ["python", "print_hello.py"]
+CMD ["python3", "-m", "debugpy", "--listen", "0.0.0.0:5678", "--wait-for-client", "print_hello.py"]

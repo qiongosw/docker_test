@@ -39,3 +39,83 @@ To run a Docker container from the image and display "Hello World!", execute:
 ```bash
 docker run {account name}/docker-test
 ```
+
+## Use docker Compose
+
+We can run docker containers with additional parameters, such as port and volume. But typing these parameters whenever we need to run a docker container is laborious. Docker compose configuration file can store the additional parameters and their values. A example of docker compose file `compose.yaml` is created in the working directory. Use the following command to activate the compose file:
+
+```bash
+docker compose -f compose.yaml up --build
+```
+
+## Debug in Docker Environment
+
+There are a few approaches to debug in the Docker environment.
+
+### Direct Debugging from Docker Terminal with pdb
+
+1. Start the container:
+
+   ```bash
+   docker exec -it <container_id>
+   ```
+
+2. Start Python with pdb:
+
+   ```bash
+   python -m pdb your_script.py
+   ```
+
+3. Set breakpoints in the terminal:
+
+   ```bash
+   break your_script.py:20  # Set breakpoint at line 20
+   continue
+   ```
+
+4. Step through the code with following commands:
+   | Command | Description |
+   | ------- | ------- |
+   | c | Continue execution |  
+   | n | Next step |
+   | s | Step into function |
+   | q | Quit |
+
+### Using debugpy for Remote Debugging
+
+1. Install debugpy in the Docker Container
+
+   Add debugpy to your requirements.txt or install it manually:
+
+2. Modify the DockerFile to run python script using debugpy
+
+   ```bash
+   CMD ["python3", "-m", "debugpy", "--listen", "0.0.0.0:5678", "--wait-for-client", "print_hello.py"]
+   ```
+
+   The above command will:
+
+   - Start a debug server on port 5678.
+   - Wait for a debugger (like VSCode) to attach.
+
+3. Expose the Debug Port in Docker compose
+   Update your docker-compose.yml:
+   ```yaml
+   ports:
+     - "5678:5678" # Expose the debug port
+   ```
+4. Start the Docker Container
+   ```bash
+   docker-compose up --build
+   ```
+5. Set Breakpoints in VSCode
+
+6. Attach VSCode to the Running Docker Container
+   Open VSCode.
+
+   - Go to "Run and Debug" tab → "Create a launch.json". An example launch.json can be found in `.vscode/launch.json`.
+
+   - Start debugging in VSCode:
+     1. Open Run and Debug Panel
+     2. Select "Python: Remote Attach"
+     3. Start Debugging → It will connect to the running container
