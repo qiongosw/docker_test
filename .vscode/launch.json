@@ -3,13 +3,19 @@
   "configurations": [
     {
       "name": "Python: Remote Attach",
-      "type": "debugpy",
+      "type": "python",
       "request": "attach",
       "connect": {
         "host": "localhost",
         "port": 5678
       },
-      "justMyCode": true
+      "justMyCode": false, // Allow debugging of all code, including external modules
+      "pathMappings": [
+        {
+          "localRoot": "${workspaceFolder}/src",
+          "remoteRoot": "/app"
+        }
+      ]
     }
   ]
 }

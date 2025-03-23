@@ -87,39 +87,30 @@ There are a few approaches to debug in the Docker environment.
 
    Add debugpy to your requirements.txt or install it manually:
 
-2. Modify the Python Script to Include debugpy
+2. Modify the DockerFile to run python script using debugpy
 
-   Add the following code at the beginning of your Python script:
-
-   ```python
-   import debugpy
-
-   # Allow connection from any IP (0.0.0.0)
-   debugpy.listen(("0.0.0.0", 5678))
-   print("Waiting for debugger to attach...")
-   debugpy.wait_for_client() # Wait until debugger is attached
-   print("Debugger attached.")
+   ```bash
+   CMD ["python3", "-m", "debugpy", "--listen", "0.0.0.0:5678", "--wait-for-client", "print_hello.py"]
    ```
 
-   The above code will:
+   The above command will:
 
    - Start a debug server on port 5678.
    - Wait for a debugger (like VSCode) to attach.
 
-3. Expose the Debug Port in Docker
-
-   Update your docker-compose.yml and Dockerfile:
-
+3. Expose the Debug Port in Docker compose
+   Update your docker-compose.yml:
    ```yaml
    ports:
      - "5678:5678" # Expose the debug port
    ```
-
 4. Start the Docker Container
    ```bash
    docker-compose up --build
    ```
-5. Attach VSCode to the Running Docker Container
+5. Set Breakpoints in VSCode
+
+6. Attach VSCode to the Running Docker Container
    Open VSCode.
 
    - Go to "Run and Debug" tab → "Create a launch.json". An example launch.json can be found in `.vscode/launch.json`.
@@ -128,9 +119,3 @@ There are a few approaches to debug in the Docker environment.
      1. Open Run and Debug Panel
      2. Select "Python: Remote Attach"
      3. Start Debugging → It will connect to the running container
-
-6. Set Breakpoints in VSCode
-
-```
-
-```
